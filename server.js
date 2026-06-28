@@ -7,7 +7,7 @@
 
 require('dotenv').config();
 
-const app              = require('./src/app');
+const app = require('./src/app');
 const { testConnection } = require('./src/config/db');
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
@@ -35,12 +35,9 @@ async function bootstrap() {
       console.log('');
     });
   } catch (err) {
-    console.error('❌  Failed to start server:', err.message);
-    console.error('');
-    console.error('   Make sure MySQL is running and the credentials in .env are correct.');
-    console.error('   If this is your first run: node src/config/initDb.js');
+    console.error('❌ Failed to start server');
+    console.error(err);
     process.exit(1);
   }
-}
 
-bootstrap();
+  bootstrap();
