@@ -1,0 +1,235 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "GitHub Profile Analyzer API",
+    "description": "A collection of API requests for the GitHub Profile Analyzer backend service.\n\n**Base URL:** `http://localhost:3000`\n\n## Quick Start\n1. Start the server: `npm run dev`\n2. Analyze a profile: POST `/api/profiles/analyze/torvalds`\n3. List all profiles: GET `/api/profiles`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "username",
+      "value": "torvalds",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Verify the API is running. Returns server status and timestamp."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profiles",
+      "item": [
+        {
+          "name": "Analyze & Store Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/analyze/{{username}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "analyze", "{{username}}"]
+            },
+            "description": "Fetches a GitHub user's public profile and repositories, computes insights, and stores everything in the database.\n\n**Note:** Re-running this for the same user will UPDATE the stored data with fresh information from GitHub.\n\n**Response includes:**\n- Complete profile data\n- Computed insights (activity score, language distribution, etc.)\n- All public repositories sorted by stars"
+          },
+          "response": []
+        },
+        {
+          "name": "Analyze - Linus Torvalds",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/analyze/torvalds",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "analyze", "torvalds"]
+            },
+            "description": "Analyze Linus Torvalds' GitHub profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Analyze - Dan Abramov",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/analyze/gaearon",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "analyze", "gaearon"]
+            },
+            "description": "Analyze Dan Abramov's GitHub profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Analyze - Sindre Sorhus",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/analyze/sindresorhus",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "analyze", "sindresorhus"]
+            },
+            "description": "Analyze Sindre Sorhus' GitHub profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Analyze - Non-existent User (404 Test)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/analyze/this-user-does-not-exist-xyz-99999",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "analyze", "this-user-does-not-exist-xyz-99999"]
+            },
+            "description": "Tests the 404 response when an invalid GitHub username is provided."
+          },
+          "response": []
+        },
+        {
+          "name": "List All Profiles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles?page=1&page_size=10&sort_by=activity_score&sort_dir=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "page_size",
+                  "value": "10",
+                  "description": "Results per page (default: 10, max: 50)"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "activity_score",
+                  "description": "Sort field: analyzed_at | followers | public_repos | activity_score"
+                },
+                {
+                  "key": "sort_dir",
+                  "value": "desc",
+                  "description": "Sort direction: asc | desc"
+                }
+              ]
+            },
+            "description": "Returns a paginated list of all analyzed profiles with summary insights.\n\n**Query Parameters:**\n- `page` — Page number (default: 1)\n- `page_size` — Results per page (default: 10, max: 50)\n- `sort_by` — `analyzed_at`, `followers`, `public_repos`, `activity_score`\n- `sort_dir` — `asc` or `desc`"
+          },
+          "response": []
+        },
+        {
+          "name": "List All Profiles (sorted by followers)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles?sort_by=followers&sort_dir=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "followers"
+                },
+                {
+                  "key": "sort_dir",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/{{username}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "{{username}}"]
+            },
+            "description": "Retrieves the full stored analysis for a specific GitHub username.\n\nReturns:\n- Complete profile data\n- Computed insights\n- All stored repositories (sorted by stars)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile - Linus Torvalds",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/torvalds",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "torvalds"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile - Not Found (404 Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/unknown-user-xyz",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "unknown-user-xyz"]
+            },
+            "description": "Tests the 404 response when requesting a profile that hasn't been analyzed yet."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Profile",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/profiles/{{username}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profiles", "{{username}}"]
+            },
+            "description": "Deletes a stored profile and all its associated insights and repository data.\n\n⚠️ This action is irreversible. The profile can be re-analyzed at any time using the POST endpoint."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
